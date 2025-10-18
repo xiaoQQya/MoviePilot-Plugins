@@ -35,7 +35,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
-    author_url = "https://github.com/xiaoQQya/MoviePilot-Plugins"
+    author_url = "https://github.com/xiaoQQya"
     # 插件配置项ID前缀
     plugin_config_prefix = "embyactorenhance_"
     # 加载顺序
