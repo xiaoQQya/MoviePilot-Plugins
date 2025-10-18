@@ -1,6 +1,6 @@
 {
     "EmbyActorEnhance": {
-        "name": "Emby 演职人员增强",
+        "name": "Emby演职人员增强",
         "description": "媒体元数据刷新，演职人员角色中文，导入季演职人员，更新节目系列演职人员为各季合并。",
         "labels": "Emby",
         "version": "1.0.0",

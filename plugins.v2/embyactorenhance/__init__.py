@@ -25,7 +25,7 @@ from app.helper.mediaserver import MediaServerHelper
 
 class EmbyActorEnhance(_PluginBase):
     # 插件名称
-    plugin_name = "Emby 演职人员增强"
+    plugin_name = "Emby演职人员增强"
     # 插件描述
     plugin_desc = "媒体元数据刷新，演职人员角色中文，导入季演职人员，更新节目系列演职人员为各季合并。"
     # 插件图标
