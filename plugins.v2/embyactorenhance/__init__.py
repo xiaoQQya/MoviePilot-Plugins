@@ -167,6 +167,8 @@ class EmbyActorEnhance(_PluginBase):
 
             for media in medias:
                 self._handle_media(service, media)
+            
+            logger.info(f"媒体服务器 {name} 演职人员增强完成")
 
     def _handle_media(self, mediaserver: ServiceInfo, media: dict):
         media_type = MediaType("电视剧" if media.get("Type") == "Episode" else "电影")
