@@ -31,7 +31,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.0"
+    plugin_version = "1.0.1"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -60,28 +60,34 @@ class EmbyActorEnhance(_PluginBase):
 
         if config:
             self._enabled = config.get("enabled")
+            self._clearcache = config.get("clearcache")
             self._onlyonce = config.get("onlyonce")
             self._mediaservers = config.get("mediaservers") or []
             self._num = config.get("num")
             self._cron = config.get("cron")
+            
+        if self._clearcache:
+            logger.info("Emby 演职人员缓存清除")
+            self._cache.clear(self.plugin_config_prefix.rstrip("_"))
+            self._clearcache = False
 
         if self._onlyonce:
-            logger.info(f"Emby 演职人员增强服务启动，立即运行一次")
+            logger.info("Emby 演职人员增强服务启动，立即运行一次")
             self._scheduler = BackgroundScheduler(timezone=settings.TZ)
             self._scheduler.add_job(func=self.run, trigger="date",
                                     run_date=datetime.now(tz=pytz.timezone(settings.TZ)) + timedelta(seconds=1),
                                     name="Emby 演职人员增强")
             self._scheduler.start()
-
-            # 取消立即运行一次配置
             self._onlyonce = False
-            self.update_config({
-                "enabled": self._enabled,
-                "onlyonce": False,
-                "mediaservers": self._mediaservers,
-                "num": self._num,
-                "cron": self._cron
-            })
+            
+        self.update_config({
+            "enabled": self._enabled,
+            "clearcache": False,
+            "onlyonce": False,
+            "mediaservers": self._mediaservers,
+            "num": self._num,
+            "cron": self._cron
+        })
 
     def get_service(self) -> List[Dict[str, Any]]:
         """
@@ -183,7 +189,7 @@ class EmbyActorEnhance(_PluginBase):
 
         # 处理缓存信息
         key = f"{mediaserver.name}:handled_medias"
-        region = "embyactorenhance"
+        region = self.plugin_config_prefix.rstrip("_")
         if self._cache.exists(key, region):
             handled_medias = self._cache.get(key, region)
             if (season_id or series_id) in handled_medias:
@@ -557,7 +563,7 @@ class EmbyActorEnhance(_PluginBase):
                                 'component': 'VCol',
                                 'props': {
                                     'cols': 12,
-                                    'md': 6
+                                    'md': 4
                                 },
                                 'content': [
                                     {
@@ -573,7 +579,23 @@ class EmbyActorEnhance(_PluginBase):
                                 'component': 'VCol',
                                 'props': {
                                     'cols': 12,
-                                    'md': 6
+                                    'md': 4
+                                },
+                                'content': [
+                                    {
+                                        'component': 'VSwitch',
+                                        'props': {
+                                            'model': 'clearcache',
+                                            'label': '清除缓存后运行',
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                'component': 'VCol',
+                                'props': {
+                                    'cols': 12,
+                                    'md': 4
                                 },
                                 'content': [
                                     {
@@ -677,6 +699,7 @@ class EmbyActorEnhance(_PluginBase):
             }
         ], {
             "enabled": False,
+            "clearcache": False,
             "onlyonce": False,
             "mediaservers": [],
             "num": 3,
@@ -695,5 +718,5 @@ class EmbyActorEnhance(_PluginBase):
         """
         退出插件
         """
-        if self._scheduler:
+        if self._scheduler and self._scheduler.running:
             self._scheduler.shutdown()

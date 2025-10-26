@@ -11,3 +11,4 @@ MoviePilot官方插件市场：https://github.com/jxxghp/MoviePilot-Plugins
 | 时间 | 插件 | 更新内容 |
 | ---  | --- | --- |
 | 2025/10/19 | Emby演职人员增强 | 新增 Emby 演职人员增强插件 |
+| 2025/10/26 | Emby演职人员增强 | 新增清除缓存后运行配置 |
