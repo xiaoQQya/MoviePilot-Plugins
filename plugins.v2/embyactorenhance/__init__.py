@@ -2,6 +2,7 @@ import re
 import time
 import pytz
 import json
+import queue
 import difflib
 from dateutil.parser import isoparse
 from datetime import datetime, timedelta
@@ -31,7 +32,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.1"
+    plugin_version = "1.0.2"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -54,6 +55,7 @@ class EmbyActorEnhance(_PluginBase):
     _tmdbapi = TmdbApi()
     _doubanapi = DoubanApi()
     _cache = Cache("ttl", 2000, 7 * 24 * 60 * 60)
+    _queue = queue.Queue()
 
     def init_plugin(self, config: Optional[dict] = None):
         self.stop_service()
@@ -71,13 +73,17 @@ class EmbyActorEnhance(_PluginBase):
             self._cache.clear(self.plugin_config_prefix.rstrip("_"))
             self._clearcache = False
 
+        self._scheduler = BackgroundScheduler(timezone=settings.TZ)
+        self._scheduler.add_job(func=self.handle_hook, trigger="date",
+                                run_date=datetime.now(tz=pytz.timezone(settings.TZ)) + timedelta(seconds=1),
+                                name="Emby 演职人员增强媒体入库处理")
+        self._scheduler.start()
+        
         if self._onlyonce:
             logger.info("Emby 演职人员增强服务启动，立即运行一次")
-            self._scheduler = BackgroundScheduler(timezone=settings.TZ)
             self._scheduler.add_job(func=self.run, trigger="date",
                                     run_date=datetime.now(tz=pytz.timezone(settings.TZ)) + timedelta(seconds=1),
                                     name="Emby 演职人员增强")
-            self._scheduler.start()
             self._onlyonce = False
             
         self.update_config({
@@ -133,7 +139,15 @@ class EmbyActorEnhance(_PluginBase):
             return
         
         media = event_info.json_object["Item"]
-        self._handle_media(mediaserver, media)
+        self._queue.put((mediaserver, media))
+
+    def handle_hook(self):
+        """
+        处理媒体入库事件
+        """
+        while (item := self._queue.get()) is not None:
+            mediaserver, media = item
+            self._handle_media(mediaserver, media)
 
     @property
     def service_infos(self) -> Optional[Dict[str, ServiceInfo]]:
@@ -718,5 +732,6 @@ class EmbyActorEnhance(_PluginBase):
         """
         退出插件
         """
+        self._queue.put(None)
         if self._scheduler and self._scheduler.running:
             self._scheduler.shutdown()
