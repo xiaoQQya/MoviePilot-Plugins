@@ -17,13 +17,14 @@
         "name": "Watchtower通知",
         "description": "接收 Watchtower 通知并推送。",
         "labels": "Watchtower",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "icon": "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/watchtower.png",
         "author": "xiaoQQya",
         "level": 1,
         "history": {
             "v1.0.0": "Watchtower 通知插件",
-            "v1.0.1": "修改通知标题"
+            "v1.0.1": "修改通知标题",
+            "v1.0.2": "修复推送空白消息问题"
         }
     }
 }
