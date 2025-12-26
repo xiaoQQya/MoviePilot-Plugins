@@ -32,7 +32,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.3"
+    plugin_version = "1.0.4"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -399,9 +399,8 @@ class EmbyActorEnhance(_PluginBase):
         season_peoples = {people["Name"]: people for people in season_info["People"]}
         updated_series_peoples = []
         for series_people in series_peoples.values():
-            if not StringUtils.is_chinese(series_people.get("Role")):
-                series_people["Role"] = season_peoples.get(
-                    series_people["Name"], {}).get("Role", series_people.get("Role"))
+            series_people["Role"] = season_peoples.get(
+                series_people["Name"], {}).get("Role", series_people.get("Role"))
             updated_series_peoples.append(series_people)
         for season_people in season_peoples.values():
             if season_people["Name"] not in series_peoples:
@@ -439,25 +438,13 @@ class EmbyActorEnhance(_PluginBase):
             peoples = series_info["People"]
             media_name = series_info["Name"]
 
-        if all(StringUtils.is_chinese(people.get("Role")) for people in peoples):
-            logger.info(f"<{media_name}> 媒体演职人员角色已全为中文，跳过更新")
-            return series_info, season_info
-
         douban_info = self._get_douban_info(media_type, series_info, season_info)
         if not douban_info:
             logger.warning(f"<{media_name}> 获取豆瓣媒体信息失败，请检查配置")
             return None, None
         douban_peoples = {}
         for people in (douban_info.get("actors", [])):
-            character = people["character"]
-            character = re.sub(r"饰\s+", "", character)
-            character = re.sub(r"饰演\s+", "", character)
-            character = re.sub(r"配\s+", "（配音）", character)
-            character = re.sub(r"演员", "", character)
-            character = re.sub(r"自己", "", character)
-            character = re.sub(r"voice", "（配音）", character)
-            character = re.sub(r"Director", "（导演）", character)
-            douban_peoples[people["name"]] = character
+            douban_peoples[people["name"]] = people["character"]
         for people in peoples:
             if not StringUtils.is_chinese(people.get("Role")):
                 if people["Name"] in douban_peoples:
@@ -474,6 +461,16 @@ class EmbyActorEnhance(_PluginBase):
                                 break
                     else:
                         logger.warning(f"<{people["Name"]}> 获取人员信息失败，请检查配置")
+            role = people["Role"]
+            role = re.sub(r"饰\s+", "", role)
+            role = re.sub(r"饰演\s+", "", role)
+            role = re.sub(r"配\s+", "（配音）", role)
+            role = re.sub(r"配音\s+", "（配音）", role)
+            role = re.sub(r"演员", "", role)
+            role = re.sub(r"自己", "", role)
+            role = re.sub(r"\s*[（(]?\s*\bvoice\b\s*[）)]?\s*", "（配音）", role)
+            role = re.sub(r"\s*[（(]?\s*\bdirector\b\s*[）)]?\s*", "（导演）", role)
+            people["Role"] = role
 
         if media_type == MediaType.TV and season_info:
             if "Cast" not in season_info["LockedFields"]:
