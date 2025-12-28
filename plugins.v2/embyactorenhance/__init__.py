@@ -32,7 +32,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.4"
+    plugin_version = "1.0.5"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -468,8 +468,8 @@ class EmbyActorEnhance(_PluginBase):
             role = re.sub(r"配音\s+", "（配音）", role)
             role = re.sub(r"演员", "", role)
             role = re.sub(r"自己", "", role)
-            role = re.sub(r"\s*[（(]?\s*\bvoice\b\s*[）)]?\s*", "（配音）", role)
-            role = re.sub(r"\s*[（(]?\s*\bdirector\b\s*[）)]?\s*", "（导演）", role)
+            role = re.sub(r"\s*[（(]?\s*\bvoice\b\s*[）)]?\s*", "（配音）", role, flags=re.IGNORECASE)
+            role = re.sub(r"\s*[（(]?\s*\bdirector\b\s*[）)]?\s*", "（导演）", role, flags=re.IGNORECASE)
             people["Role"] = role
 
         if media_type == MediaType.TV and season_info:
