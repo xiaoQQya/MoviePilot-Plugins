@@ -17,3 +17,4 @@ MoviePilot官方插件市场：https://github.com/jxxghp/MoviePilot-Plugins
 | 2025/11/11 | Watchtower通知  | 新增 Watchtower 通知插件 |
 | 2025/12/28 | Emby演职人员增强 | 优化演职人员配音等角色修饰词处理 |
 | 2026/01/02 | Emby演职人员增强 | 修复插件首次初始化失败的问题 |
+| 2026/01/03 | Emby演职人员增强 | 修复 webhook 启动可能失败的问题 |

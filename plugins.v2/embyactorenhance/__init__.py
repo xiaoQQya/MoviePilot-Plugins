@@ -32,7 +32,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.6"
+    plugin_version = "1.0.7"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -150,7 +150,7 @@ class EmbyActorEnhance(_PluginBase):
         while (item := self._queue.get()) is not None:
             mediaserver, media = item
             self._handle_media(mediaserver, media)
-        logger.info("媒体入库事件 webhook 处理结束")
+        logger.info("媒体入库事件 webhook 处理停止")
 
     @property
     def service_infos(self) -> Optional[Dict[str, ServiceInfo]]:
@@ -735,3 +735,6 @@ class EmbyActorEnhance(_PluginBase):
         if self._scheduler and self._scheduler.running:
             self._queue.put(None)
             self._scheduler.shutdown()
+        
+        self._queue = queue.Queue()
+        self._scheduler = None
