@@ -6,6 +6,7 @@ MoviePilot官方插件市场：https://github.com/jxxghp/MoviePilot-Plugins
 
 1. [Emby演职人员增强](https://github.com/xiaoQQya/MoviePilot-Plugins/tree/main/plugins.v2/embyactorenhance)：媒体元数据刷新，演职人员角色中文，导入季演职人员，更新节目系列演职人员为各季合并。
 2. [Watchtower通知](https://github.com/xiaoQQya/MoviePilot-Plugins/tree/main/plugins.v2/watchtowernotify)：接收 Watchtower 通知并推送。
+3. [SubStore通知](https://github.com/xiaoQQya/MoviePilot-Plugins/tree/main/plugins.v2/substorenotify)：接收 SubStore 通知并推送。
 
 ## 更新日志
 
@@ -18,3 +19,4 @@ MoviePilot官方插件市场：https://github.com/jxxghp/MoviePilot-Plugins
 | 2025/12/28 | Emby演职人员增强 | 优化演职人员配音等角色修饰词处理 |
 | 2026/01/02 | Emby演职人员增强 | 修复插件首次初始化失败的问题 |
 | 2026/01/03 | Emby演职人员增强 | 修复 webhook 启动可能失败的问题 |
+| 2026/02/01 | SubStore通知    | 新增 SubStore 通知插件 |
