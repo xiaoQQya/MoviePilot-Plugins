@@ -15,7 +15,7 @@ class WatchtowerNotify(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/watchtower.png"
     # 插件版本
-    plugin_version = "1.0.2"
+    plugin_version = "1.0.3"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -128,6 +128,49 @@ class WatchtowerNotify(_PluginBase):
                                             'items': [{"title": item.value, "value": item.name}
                                                       for item in NotificationType]
                                         }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        'component': 'VRow',
+                        'content': [
+                            {
+                                'component': 'VCol',
+                                'props': {
+                                    'cols': 12,
+                                },
+                                'content': [
+                                    {
+                                        'component': 'VAlert',
+                                        'props': {
+                                            'type': 'success',
+                                            'variant': 'tonal'
+                                        },
+                                        'content': [
+                                            {
+                                                'component': 'span',
+                                                'text': '注意：配置示例请参考：'
+                                            },
+                                            {
+                                                'component': 'a',
+                                                'props': {
+                                                    'href': 'https://github.com/xiaoQQya/MoviePilot-Plugins/tree/main/plugins.v2/watchtowernotify/README.md',
+                                                    'target': '_blank'
+                                                },
+                                                'content': [
+                                                    {
+                                                        'component': 'u',
+                                                        'text': 'README'
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                'component': 'span',
+                                                'text': ' 。'
+                                            },
+                                        ]
                                     }
                                 ]
                             }
