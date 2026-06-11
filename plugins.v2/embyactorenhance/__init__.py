@@ -286,15 +286,15 @@ class EmbyActorEnhance(_PluginBase):
         自动刷新单个项目信息
         """
         item_id = media["Id"]
-        type = MediaType("电视剧" if media.get("Type") == "Episode" else "电影")
-        series_name = media.get("SeriesName") if type == MediaType.TV else media.get("Name")
+        media_type = MediaType("电视剧" if media.get("Type") == "Episode" else "电影")
+        series_name = media.get("SeriesName") if media_type == MediaType.TV else media.get("Name")
         season_name = media.get("SeasonName", None)
         episode_name = media["Name"]
-        media_name = f"{series_name}-{season_name}-{episode_name}" if type == MediaType.TV else f"{series_name}-{episode_name}"
+        media_name = f"{series_name}-{season_name}-{episode_name}" if media_type == MediaType.TV else f"{series_name}-{episode_name}"
         overview = media.get("Overview")
         image = media.get("ImageTags", {}).get("Primary")
 
-        pattern = re.compile(r'第\s*([0-9]|[十|一|二|三|四|五|六|七|八|九|零])+\s*集')
+        pattern = re.compile(r'第\s*([0-9]|[十一二三四五六七八九零])+\s*集')
         refresh_meta = bool(pattern.search(episode_name)) or not overview
         refresh_image = not image
 
@@ -461,7 +461,7 @@ class EmbyActorEnhance(_PluginBase):
                                 people["Role"] = douban_peoples[name]
                                 break
                     else:
-                        logger.warning(f"<{people["Name"]}> 获取人员信息失败，请检查配置")
+                        logger.warning(f"<{people['Name']}> 获取人员信息失败，请检查配置")
             role = people["Role"]
             role = re.sub(r"饰\s+", "", role)
             role = re.sub(r"饰演\s+", "", role)
@@ -494,7 +494,8 @@ class EmbyActorEnhance(_PluginBase):
         """
         series_name = series_info["Name"]
         season_name = season_info["Name"] if season_info else ""
-        year = season_info["PremiereDate"][:4] if season_info else series_info["PremiereDate"][:4]
+        premiere_date = (season_info or series_info).get("PremiereDate", "")
+        year = premiere_date[:4] if premiere_date else ""
         result = self._doubanapi.search(series_name)
         if not result or not result.get("items"):
             return None
