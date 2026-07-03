@@ -21,3 +21,4 @@ MoviePilot官方插件市场：https://github.com/jxxghp/MoviePilot-Plugins
 | 2026/01/03 | Emby演职人员增强 | 修复 webhook 启动可能失败的问题 |
 | 2026/02/01 | SubStore通知    | 新增 SubStore 通知插件 |
 | 2026/02/08 | Watchtower通知  | 新增配置示例 |
+| 2026/07/03 | Emby演职人员增强 | 1. 优化媒体元信息刷新机制；2. 支持演职人员名字中文； |
