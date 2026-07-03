@@ -445,11 +445,13 @@ class EmbyActorEnhance(_PluginBase):
             return None, None
         douban_peoples = {}
         for people in (douban_info.get("actors", [])):
-            douban_peoples[people["name"]] = people["character"]
+            douban_peoples[people["name"]] = people
+            douban_peoples[people["latin_name"]] = people
         for people in peoples:
-            if not StringUtils.is_chinese(people.get("Role")):
+            if not StringUtils.is_chinese(people.get("Name")) or not StringUtils.is_chinese(people.get("Role")):
                 if people["Name"] in douban_peoples:
-                    people["Role"] = douban_peoples[people["Name"]]
+                    people["Name"] = douban_peoples[people["Name"]]["name"]
+                    people["Role"] = douban_peoples[people["Name"]]["character"]
                 else:
                     people_info = self._get_item_info(mediaserver, people["Id"])
                     if people_info and people_info.get("ProviderIds", {}).get("Tmdb"):
@@ -458,10 +460,11 @@ class EmbyActorEnhance(_PluginBase):
                         also_known_as = people_tmdb_info.get("also_known_as", [])
                         for name in also_known_as:
                             if name in douban_peoples:
-                                people["Role"] = douban_peoples[name]
+                                people["Name"] = douban_peoples[name]["name"]
+                                people["Role"] = douban_peoples[name]["character"]
                                 break
                     else:
-                        logger.warning(f"<{people["Name"]}> 获取人员信息失败，请检查配置")
+                        logger.warning(f"人员 <{people["Name"]}> 未获取到 tmdbid，跳过更新演职人员角色中文")
             role = people["Role"]
             role = re.sub(r"饰\s+", "", role)
             role = re.sub(r"饰演\s+", "", role)
