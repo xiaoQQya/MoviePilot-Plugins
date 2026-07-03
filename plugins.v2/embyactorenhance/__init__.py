@@ -32,7 +32,7 @@ class EmbyActorEnhance(_PluginBase):
     # 插件图标
     plugin_icon = "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png"
     # 插件版本
-    plugin_version = "1.0.8"
+    plugin_version = "1.0.9"
     # 插件作者
     plugin_author = "xiaoQQya"
     # 作者主页
@@ -465,7 +465,7 @@ class EmbyActorEnhance(_PluginBase):
                                 break
                     else:
                         logger.warning(f"人员 <{people["Name"]}> 未获取到 tmdbid，跳过更新演职人员角色中文")
-            role = people["Role"]
+            role = people.get("Role", "")
             role = re.sub(r"饰\s+", "", role)
             role = re.sub(r"饰演\s+", "", role)
             role = re.sub(r"配\s+", "（配音）", role)
