@@ -295,7 +295,7 @@ class EmbyActorEnhance(_PluginBase):
         image = media.get("ImageTags", {}).get("Primary")
 
         pattern = re.compile(r'第\s*([0-9]|[十|一|二|三|四|五|六|七|八|九|零])+\s*集')
-        refresh_meta = bool(pattern.search(episode_name)) or not overview
+        refresh_meta = bool(pattern.search(episode_name)) or not overview or not StringUtils.is_chinese(episode_name) or not StringUtils.is_chinese(overview)
         refresh_image = not image
 
         if refresh_meta or refresh_image:
