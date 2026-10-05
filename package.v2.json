@@ -1,9 +1,9 @@
 {
     "EmbyActorEnhance": {
         "name": "Emby演职人员增强",
-        "description": "媒体元数据刷新，演职人员角色中文，导入季演职人员，更新节目系列演职人员为各季合并。",
+        "description": "媒体元数据刷新，演职人员角色中文，导入季/集演职人员，更新节目系列演职人员为各季合并。",
         "labels": "Emby",
-        "version": "1.0.9",
+        "version": "1.1.0",
         "icon": "https://raw.githubusercontent.com/xiaoQQya/MoviePilot-Plugins/refs/heads/main/icons/actor.png",
         "author": "xiaoQQya",
         "level": 1,
@@ -17,7 +17,8 @@
             "v1.0.6": "修复插件首次初始化失败的问题",
             "v1.0.7": "修复 webhook 启动可能失败的问题",
             "v1.0.8": "优化媒体元信息刷新逻辑并支持演职人员名字中文",
-            "v1.0.9": "修复部分问题"
+            "v1.0.9": "修复部分问题",
+            "v1.1.0": "重构代码支持刷新集演职人员"
         }
     },
     "WatchtowerNotify": {
